@@ -19,3 +19,40 @@ volumes:
                         device: /home/vmaricru/data/mariadb
                         o: bind
                         type: none
+
+services:
+        mariadb:
+                container_name: mariadb_con
+                build: ./mariadb
+                volumes: 
+                        - mariadb:/var/lib/mysql
+                networks:
+                        - localhost
+                image: mariadb
+                restart: always
+
+        wordpress:
+                depends_on:
+                        -mariadb
+                container_name: wordpress_con
+                build: ./wordpress
+                image: wordpress
+                volumes:
+                        - wordpress:var/www/wordpress
+                networks: 
+                        - localhost
+                restart: always
+
+        nginx:
+                depends_on:
+                        - wordpress
+                container_name: nginx_con
+                build: ./nginx
+                ports:
+                        - "443:443"
+                volumes: 
+                        - wordpress:var/www/wordpress
+                networks:
+                        - localhost
+                restart: always
+
