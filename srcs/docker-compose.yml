@@ -1,7 +1,8 @@
-version "3.5"
+version: "3.5"
 
 networks:
-        localhost
+        localhost:
+                name: intranet
 
 volumes:
         wordpress:
@@ -33,12 +34,12 @@ services:
 
         wordpress:
                 depends_on:
-                        -mariadb
+                        - mariadb
                 container_name: wordpress_con
                 build: ./wordpress
                 image: wordpress
                 volumes:
-                        - wordpress:var/www/wordpress
+                        - wordpress:/var/www/wordpress
                 networks: 
                         - localhost
                 restart: always
@@ -51,7 +52,7 @@ services:
                 ports:
                         - "443:443"
                 volumes: 
-                        - wordpress:var/www/wordpress
+                        - wordpress:/var/www/wordpress
                 networks:
                         - localhost
                 restart: always
